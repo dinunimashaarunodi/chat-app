@@ -1,21 +1,28 @@
 import React, { useState } from 'react'
 import './Login.css'
 import assets from '../../assets/assets'
-import { signup } from '../../config/firebase'
+import { signup ,login} from '../../config/firebase'
 
 const Login = () => {
 
-   const [currState,setCurrentSatate]=useState('Sign Up');
+   const [currState,setCurrentState]=useState('Sign Up');
    const [userName,setUserName]=useState('');
    const [email,setEmail]=useState('');
    const [password,setPassword]=useState('');
 
-   const onSubmitHandler=(event)=>{
-    event.preventDefault();
-    if(currState==='Sign Up'){
-      signup(userName,email,password);
+   const onSubmitHandler = async (event) => {
+  event.preventDefault();
+  try {
+    if (currState === 'Sign Up') {
+      await signup(userName, email, password);
+    } else {
+      await login(email, password);
     }
-   }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
   return (
     <div className='login'>
       <img src={assets.logo_big} alt='' className='logo'/>
@@ -32,8 +39,8 @@ const Login = () => {
         <div className="login-forgot">
           {
             currState==='Sign Up'
-            ?<p className='login-toggle'>Already have an account? <span onClick={()=>setCurrentSatate('Login')}>Login here</span></p>
-            :<p className='login-toggle'>Create an account? <span onClick={()=>setCurrentSatate('Sign Up')}>click here</span></p>
+            ?<p className='login-toggle'>Already have an account? <span onClick={()=>setCurrentState('Login')}>Login here</span></p>
+            :<p className='login-toggle'>Create an account? <span onClick={()=>setCurrentState('Sign Up')}>click here</span></p>
 
           }
           
